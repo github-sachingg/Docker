@@ -90,11 +90,11 @@ setup_target()
 create_mnt_huge()
 {
 	echo "Creating /mnt/huge and mounting as hugetlbfs"
-	sudo mkdir -p /mnt/huge
+	mkdir -p /mnt/huge
 
 	grep -s '/mnt/huge' /proc/mounts > /dev/null
 	if [ $? -ne 0 ] ; then
-		sudo mount -t hugetlbfs nodev /mnt/huge
+		mount -t hugetlbfs nodev /mnt/huge
 	fi
 }
 
@@ -106,11 +106,11 @@ remove_mnt_huge()
 	echo "Unmounting /mnt/huge and removing directory"
 	grep -s '/mnt/huge' /proc/mounts > /dev/null
 	if [ $? -eq 0 ] ; then
-		sudo umount /mnt/huge
+		umount /mnt/huge
 	fi
 
 	if [ -d /mnt/huge ] ; then
-		sudo rm -R /mnt/huge
+		rm -R /mnt/huge
 	fi
 }
 
@@ -302,7 +302,7 @@ clear_huge_pages()
 		echo "echo 0 > $d/hugepages/hugepages-${HUGEPGSZ}/nr_hugepages" >> .echo_tmp
 	done
 	echo "Removing currently reserved hugepages"
-	sudo sh .echo_tmp
+	sh .echo_tmp
 	rm -f .echo_tmp
 
 	remove_mnt_huge
@@ -352,7 +352,7 @@ set_numa_pages()
 		echo "echo $Pages > $d/hugepages/hugepages-${HUGEPGSZ}/nr_hugepages" >> .echo_tmp
 	done
 	echo "Reserving hugepages"
-	sudo sh .echo_tmp
+	sh .echo_tmp
 	rm -f .echo_tmp
 
 	create_mnt_huge
@@ -436,7 +436,7 @@ bind_devices_to_igb_uio()
 		echo ""
 		echo -n "Enter PCI address of device to bind to IGB UIO driver: "
 		read PCI_PATH
-		sudo ${RTE_SDK}/usertools/dpdk-devbind.py -b igb_uio $PCI_PATH && echo "OK"
+		${RTE_SDK}/usertools/dpdk-devbind.py -b igb_uio $PCI_PATH && echo "OK"
 	else
 		echo "# Please load the 'igb_uio' kernel module before querying or "
 		echo "# adjusting device bindings"
@@ -455,7 +455,7 @@ unbind_devices()
 	echo ""
 	echo -n "Enter name of kernel driver to bind the device to: "
 	read DRV
-	sudo ${RTE_SDK}/usertools/dpdk-devbind.py -b $DRV $PCI_PATH && echo "OK"
+	${RTE_SDK}/usertools/dpdk-devbind.py -b $DRV $PCI_PATH && echo "OK"
 }
 
 #
