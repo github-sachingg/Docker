@@ -106,11 +106,11 @@ remove_mnt_huge()
 	echo "Unmounting /mnt/huge and removing directory"
 	grep -s '/mnt/huge' /proc/mounts > /dev/null
 	if [ $? -eq 0 ] ; then
-		umount /mnt/huge
+		sudo umount /mnt/huge
 	fi
 
 	if [ -d /mnt/huge ] ; then
-		rm -R /mnt/huge
+		sudo rm -R /mnt/huge
 	fi
 }
 
@@ -236,7 +236,7 @@ load_kni_module()
 
     # Now try load the KNI module.
 	echo "Loading DPDK KNI module with loopback mode Ring Enable"
-	sudo /sbin/insmod $RTE_SDK/$RTE_TARGET/kmod/rte_kni.ko "lo_mode=lo_mode_ring"
+	/sbin/insmod $RTE_SDK/$RTE_TARGET/kmod/rte_kni.ko "lo_mode=lo_mode_ring"
 	if [ $? -ne 0 ] ; then
 		echo "## ERROR: Could not load kmod/rte_kni.ko."
 		quit
@@ -436,7 +436,7 @@ bind_devices_to_igb_uio()
 		echo ""
 		echo -n "Enter PCI address of device to bind to IGB UIO driver: "
 		read PCI_PATH
-		${RTE_SDK}/usertools/dpdk-devbind.py -b igb_uio $PCI_PATH && echo "OK"
+		sudo ${RTE_SDK}/usertools/dpdk-devbind.py -b igb_uio $PCI_PATH && echo "OK"
 	else
 		echo "# Please load the 'igb_uio' kernel module before querying or "
 		echo "# adjusting device bindings"
@@ -455,7 +455,7 @@ unbind_devices()
 	echo ""
 	echo -n "Enter name of kernel driver to bind the device to: "
 	read DRV
-	${RTE_SDK}/usertools/dpdk-devbind.py -b $DRV $PCI_PATH && echo "OK"
+	sudo ${RTE_SDK}/usertools/dpdk-devbind.py -b $DRV $PCI_PATH && echo "OK"
 }
 
 #
@@ -571,8 +571,8 @@ export RTE_TARGET=x86_64-native-linuxapp-gcc
 export RTE_SDK=$PWD
 setup_target
 #set_non_numa_pages
-set_numa_pages
-load_kni_module
+#set_numa_pages
+#load_kni_module
 
 echo $RTE_TARGET
 echo $RTE_SDK
