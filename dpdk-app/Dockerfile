@@ -35,14 +35,12 @@ WORKDIR /usr/src/app1/
 COPY . /usr/src/dpdk_code/
 RUN ls -l
 WORKDIR /usr/src/dpdk_code/
-#RUN ls -l app1/
-#RUN ./update_source.sh && apt-get update && apt-get upgrade -y && apt list --installed
 
-#RUN cp setup_config.sh config/
-#WORKDIR /usr/src/dpdk_code/config
+RUN cp setup_config.sh config/
+WORKDIR /usr/src/dpdk_code/config
+RUN ./setup_config.sh 
+WORKDIR /usr/src/dpdk_code
 
-#RUN ./setup_config.sh 
-#WORKDIR /usr/src/dpdk_code
 #COMPILE THE DPDK CODE
 RUN ./app1/dpdk-setup.sh 
 #CMD ["./app1/dpdk-setup.sh"]
@@ -50,8 +48,9 @@ RUN ./app1/dpdk-setup.sh
 RUN export RTE_SDK=/usr/src/dpdk_code/&& cd app1/ && make
 
 #RUN rmmod rte_kni.ko && insmod insmod rte_kni.ko "lo_mode=lo_mode_ring"
-RUN /sbin/insmod $RTE_SDK/$RTE_TARGET/kmod/rte_kni.ko "lo_mode=lo_mode_ring"
+RUN /sbin/insmod ./x86_64-default-linuxapp-gcc/kmod/rte_kni.ko "lo_mode=lo_mode_ring"
+
 #RUN THE APPLICATION
 #CMD ["export RTE_SDK=$PWD"]
 #CMD ["./build/kni -c 0x3 -n 4 -- -P -p 0x3 --config='(0,1,2)'"]
-CMD ["./build/kni -c 0x3 -n 4 -- -P -p 0x1 --config='(0,1,2)'"]
+CMD ["./build/kni -c 0x1 -n 4 -- -P -p 0x1 --config='(0,1,1)'"]

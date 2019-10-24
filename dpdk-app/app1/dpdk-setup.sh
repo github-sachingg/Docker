@@ -573,6 +573,3 @@ setup_target
 #set_non_numa_pages
 #set_numa_pages
 #load_kni_module
-
-echo $RTE_TARGET
-echo $RTE_SDK
