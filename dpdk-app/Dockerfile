@@ -53,4 +53,5 @@ RUN /sbin/insmod ./x86_64-default-linuxapp-gcc/kmod/rte_kni.ko "lo_mode=lo_mode_
 #RUN THE APPLICATION
 #CMD ["export RTE_SDK=$PWD"]
 #CMD ["./build/kni -c 0x3 -n 4 -- -P -p 0x3 --config='(0,1,2)'"]
+# The below inputs, which are binding of NIC queues to Ports, should ideally be done from a config file
 CMD ["./build/kni -c 0x1 -n 4 -- -P -p 0x1 --config='(0,1,1)'"]
