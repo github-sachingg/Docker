@@ -1,2 +1,2 @@
 # Docker
- This prokect contains Docker images 
+ This image contains docker KNI application
